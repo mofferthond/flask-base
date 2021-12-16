@@ -1,0 +1,53 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <div class="ui container">
+    <a href="{{ url_for('wakkerdam.games') }}"><<< Terug naar spellen</a>
+    <p>Spellen waarvoor je bent uitgenodigd:</p>
+    <div class='ui one column stackable grid'>
+    {% set count = namespace(value=0) %}
+    {% for invite in invites %}
+        <div class='column'>
+            <div class="ui segment grid">
+                <div class="six wide column">
+                    <h2>{{ invite.getGame().getName() }}</h2>
+                </div>
+                <div class='two wide column'>
+                    <h5>Host:</h5>
+                    <p>{{ invite.getUser().getFullName() }}</p>
+                </div>
+                <div class='two wide column'>
+                    <h5>Start datum:</h5>
+                    <p>{{ invite.getGame().getStartDate() }}</p>
+                </div>
+                <div class='two wide column'>
+                    <h5>Aantal spelers:</h5>
+                    <p>{{ invite.getGame().getPlayerAmount() }}</p>
+                </div>
+                <div class='four wide column'>
+                    <div class="ui grid">
+                        <div class="eight wide column">
+                            <a href="{{ url_for('wakkerdam.accept_invite', accept='accept', inviteId = invite.getId() ) }}" class="ui button primary">
+                                Accepteer
+                            </a>
+                        </div>
+                        <div class="eight wide column">
+                            <a href="{{ url_for('wakkerdam.accept_invite', accept='decline', inviteId = invite.getId() ) }}" class="ui button">
+                                Wijs af
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% set count.value = count.value + 1 %}
+      {% endfor %}
+    </div>
+      {% if count.value == 0 %}
+      <div class="ui one column grid">
+        <p>Er zijn hier geen uinodigingen</p>
+      </div>
+        
+      {% endif %}
+    </div>
+{% endblock content %}

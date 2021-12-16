@@ -52,23 +52,25 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(
+            confirmed=1,
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             email=form.email.data,
             password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        token = user.generate_confirmation_token()
-        confirm_link = url_for('account.confirm', token=token, _external=True)
-        get_queue().enqueue(
-            send_email,
-            recipient=user.email,
-            subject='Confirm Your Account',
-            template='account/email/confirm',
-            user=user,
-            confirm_link=confirm_link)
-        flash('A confirmation link has been sent to {}.'.format(user.email),
-              'warning')
+        flash("Account succesvol aangemaakt", "success")
+        # token = user.generate_confirmation_token()
+        # confirm_link = url_for('account.confirm', token=token, _external=True)
+        # get_queue().enqueue(
+        #     send_email,
+        #     recipient=user.email,
+        #     subject='Confirm Your Account',
+        #     template='account/email/confirm',
+        #     user=user,
+        #     confirm_link=confirm_link)
+        # flash('A confirmation link has been sent to {}.'.format(user.email),
+        #       'warning')
         return redirect(url_for('main.index'))
     return render_template('account/register.html', form=form)
 
@@ -86,7 +88,21 @@ def logout():
 @login_required
 def manage():
     """Display a user's account information."""
-    return render_template('account/manage.html', user=current_user, form=None)
+    return render_template('account/manage.html', avatar=None, user=current_user, form=None)
+    
+@account.route('/manage/avatar', methods=['GET'])
+@login_required
+def avatar():
+    return render_template('account/manage.html', user=current_user, form=None, avatar=True)
+
+@account.route('/manage/change_avatar/<string:avatar>', methods=['GET'])
+@login_required
+def change_avatar(avatar):
+    if avatar in ["ade", "christian", "daniel", "default", "elliot", "elyse", "helen", "jason", "jenny", "joe", "justen", "kristy", "mark", "matt", "matthew", "molly", "nan", "stevie", "veronika", "zoe"]:
+        current_user.setAvatar(avatar)
+    else:
+        flash('Deze avatar bestaat niet', 'error')
+    return redirect(url_for('account.avatar'))
 
 
 @account.route('/reset-password', methods=['GET', 'POST'])
@@ -150,7 +166,7 @@ def change_password():
             return redirect(url_for('main.index'))
         else:
             flash('Original password is invalid.', 'form-error')
-    return render_template('account/manage.html', form=form)
+    return render_template('account/manage.html', avatar=None, form=form)
 
 
 @account.route('/manage/change-email', methods=['GET', 'POST'])
@@ -178,7 +194,7 @@ def change_email_request():
             return redirect(url_for('main.index'))
         else:
             flash('Invalid email or password.', 'form-error')
-    return render_template('account/manage.html', form=form)
+    return render_template('account/manage.html', avatar=None, form=form)
 
 
 @account.route('/manage/change-email/<token>', methods=['GET', 'POST'])

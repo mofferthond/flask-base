@@ -3,10 +3,11 @@
 {% import 'macros/check_password.html' as check %}
 
 {% set endpoints = [
-    ('account.manage', 'Account information'),
-    ('account.change_email_request', 'Change email address'),
-    ('account.change_password', 'Change password'),
-    ('account.logout', 'Log out')
+    ('account.manage', 'Account informatie'),
+    ('account.avatar', 'Verander avatar'),
+    ('account.change_email_request', 'Verander emailadres'),
+    ('account.change_password', 'Verander wachtwoord'),
+    ('account.logout', 'Log out')  
 ] %}
 
 {% macro navigation(items) %}
@@ -28,6 +29,115 @@
     </table>
 {% endmacro %}
 
+{% macro avatar_page(user) %}`
+    <script>
+
+    </script>
+    <div class="ui centered card">
+        <div class="image">
+          <img src="{{ url_for('static', filename='images/large/'+user.getAvatar()+'.jpg') }}">
+        </div>
+    </div>
+    <div class="ui segment grid">
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='ade') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/ade.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">    
+            <a href="{{ url_for('account.change_avatar', avatar='christian') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/christian.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='daniel') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/daniel.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='elliot') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/elliot.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='elyse') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/elyse.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='helen') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/helen.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='jason') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/jason.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='jenny') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/jenny.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='joe') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/joe.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='justen') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/justen.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='kristy') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/kristy.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='mark') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/mark.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='matt') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/matt.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='matthew') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/matthew.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='molly') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/molly.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='nan') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/nan.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='stevie') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/stevie.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='veronika') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/veronika.jpg') }}">
+            </a>
+        </div>
+        <div class="column three wide">
+            <a href="{{ url_for('account.change_avatar', avatar='zoe') }}">
+                <img class="ui image circular" src="{{ url_for('static', filename='images/large/zoe.jpg') }}">
+            </a>
+        </div>
+    </div>
+    
+{% endmacro %}
+
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
@@ -43,6 +153,8 @@
             <div class="eight wide column">
                 {% if form %}
                     {{ f.render_form(form, extra_classes='fluid') }}
+                {% elif avatar %}
+                    {{ avatar_page(user) }}
                 {% else %}
                     {{ user_info(user) }}
                 {% endif %}

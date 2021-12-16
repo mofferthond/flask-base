@@ -1,0 +1,142 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% macro get_replies(parent, layer) %}
+    {% for message in parent.getReplies() %}  
+        {{ render_message(message, layer) }}
+    {% endfor %}
+{% endmacro %}
+
+{% set flashes = {
+    'error':   get_flashed_messages(category_filter=['form-error']),
+    'warning': get_flashed_messages(category_filter=['form-check-email']),
+    'info':    get_flashed_messages(category_filter=['form-info']),
+    'success': get_flashed_messages(category_filter=['form-success'])
+} %}
+
+{% macro render_message(message, layer) %}
+    <div class="comment" id="message-{{ message.getId() }}">
+        <a class="avatar">
+            <img src="{{ url_for('static', filename='images/large/'+message.getChatter().getPlayer().getUser().getAvatar()+'.jpg') }}">
+        </a>
+        <div class="content">
+            <a class="author">
+                {{ message.getChatter().getPlayer().getUser().getFullName() }}
+            </a>
+            <div class="metadata">
+                <span class="date">{{ message.getTimestamp() }}</span>
+              </div>
+              <div class="text">
+                {{ message.getText() }}
+              </div>
+              {% if layer < 5 and chat.isOpen() %}
+              <div class="actions">
+                <a class="reply" onclick="reply_to({{ message.getId() }})">Reageer</a>
+              </div>
+              {% endif %}
+                {{ get_replies(message, layer+1) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% block content %}
+<div class="ui text container" style="height: 100vh;">
+    <a href="{{ url_for('wakkerdam.game', gameId=chat.getGame().getId()) }}"><<< Terug naar speloverzicht</a>
+    <div class="ui basic segment" style="margin:0;">
+        <div class="ui" style="height: 2vh;">
+        <h1>{{ chat.getChatType().getName() }}</h1>
+        </div>
+        <div class="ui horizontal divider left aligned">
+            <p data-tooltip="Dit getal is gebaseerd op het aantal andere spelers die deze pagina hebben bezocht in de afgelopen 10 minuten." data-position="bottom center" data-variation="tiny" >{{ chat.getOnlineAmount() - 1 }} online in de afgelopen 10 minuten</p>
+          
+        </div>
+        <div class="ui" id="messages" style="height: calc( 100vh - 120px ); overflow:scroll; overflow-y: scroll; overflow-x: clip; display: flex; flex-direction: column-reverse; scrollbar-color: rgba(112,112,112, 0.6) rgba(0,0,0,0); scrollbar-width: thin;">
+            <form class="ui reply form {{ chat.getId() }}" action="{{ url_for('wakkerdam.chat', chatId=chat.getId()) }}" method="post">
+                
+                <div>
+                    {% for chatter in chat.getChatters(orderBy="isDead") %}
+                    <a class="ui image label" style="margin-top: 2px; {% if chatter.getPlayer().isDead() %}text-decoration: line-through;{% endif %}">
+                        {% if chatter.getPlayer().isDead() %} 
+                            {% set avatarUrl = 'images/small_gray/' + chatter.getPlayer().getUser().getAvatar() + '.jpg' %} 
+                        {% else %} 
+                            {% set avatarUrl = 'images/small/' + chatter.getPlayer().getUser().getAvatar() + '.jpg' %} 
+                        {% endif %}
+                        <img src="{{ url_for('static', filename=avatarUrl) }}">
+                        {{ chatter.getPlayer().getUser().getFullName() }}
+                    </a>
+                {% endfor %}
+                </div>
+                {% if chat.isOpen() %}
+                    {{ form.csrf_token() }}
+                    {{ form.reply_to(value=0) }}
+                    {{ f.render_form_field(form.text) }}
+                    {{ f.render_form_field(form.submit) }}
+                {% else %}
+                    <div class="ui segment center aligned grid">
+                        <div class="sixteen wide column">
+                            <p>Deze chat is nu gesloten, je kunt er geen berichten in plaatsen.</p>
+                        </div>
+                        <div class="sixteen wide column">
+                            <p>De chat gaat weer open om {{ chat.getChatType().getOpensString() }}.</p>
+                        </div>
+                       
+                        
+                    </div>
+                {% endif %}
+            </form>
+            <div class="ui comments">
+                
+                
+                {% for message in chat.getMessages(orderBy="timestamp") %}
+                    {% if message.getReplyTo() is none %}
+                        {{ render_message(message, 0) }}
+                    {% endif %}
+                {% endfor %}
+                
+                
+                
+                
+            </div>
+            
+        </div>
+      </div>
+</div>
+
+<script>
+
+//create function, it expects 2 values.
+function insertAfter(newElement,targetElement) {
+	//target is what you want it to go after. Look for this elements parent.
+	var parent = targetElement.parentNode;
+ 
+	//if the parents lastchild is the targetElement...
+	if(parent.lastchild == targetElement) {
+		//add the newElement after the target element.
+		parent.appendChild(newElement);
+		} else {
+		// else the target has siblings, insert the new element between the target and it's next sibling.
+		parent.insertBefore(newElement, targetElement.nextSibling);
+		}
+}
+
+function cancel_reply(){
+    reply_box = document.querySelector('#replybox');
+    if (reply_box != null) {
+        reply_box.remove();
+    }
+}
+
+function reply_to(message_id) {
+    cancel_reply()
+
+    parent_message = document.querySelector('#message-'+message_id);
+    var form = document.createElement("div");
+    form.classList.add('ui');
+    form.id = 'replybox';
+    form.innerHTML = '<form class="ui reply form" action="" method="post">{{ form.csrf_token() }}<input id="reply_to" name="reply_to" type="hidden" value="'+message_id+'"><div class="field"><label for="text"></label><textarea id="text" name="text" placeholder="" required=""></textarea></div><div class="field  "><div class="ui tiny buttons"><input type="submit" name="submit" value="Verstuur bericht" class="ui positive button" onclick="submit"><div class="or"></div><a class="ui button" onclick="cancel_reply()">Annuleren</a></div></form>';
+    parent_actions_box = parent_message.querySelector('.actions');
+    insertAfter(form, parent_actions_box);
+}
+</script>
+
+{% endblock content %}

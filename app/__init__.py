@@ -8,6 +8,7 @@ from flask_mail import Mail
 from flask_rq import RQ
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
+from flask_socketio import SocketIO
 
 from app.assets import app_css, app_js, vendor_css, vendor_js
 from config import config as Config
@@ -18,6 +19,7 @@ mail = Mail()
 db = SQLAlchemy()
 csrf = CSRFProtect()
 compress = Compress()
+socket = SocketIO()
 
 # Set up Flask-Login
 login_manager = LoginManager()
@@ -45,6 +47,7 @@ def create_app(config):
     csrf.init_app(app)
     compress.init_app(app)
     RQ(app)
+    socket.init_app(app)
 
     # Register Jinja template functions
     from .utils import register_template_utils
@@ -76,5 +79,8 @@ def create_app(config):
 
     from .admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
+    from .wakkerdam import wakkerdam as wakkerdam_blueprint
+    app.register_blueprint(wakkerdam_blueprint, url_prefix='/play')
 
     return app

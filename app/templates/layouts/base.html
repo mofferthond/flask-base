@@ -6,6 +6,7 @@
         {% include 'partials/_head.html' %}
         {# Any templates that extend this template can set custom_head_tags to add scripts to their page #}
         {% block custom_head_tags %}{% endblock %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
     </head>
     <body>
       {# Example dropdown menu setup. Uncomment lines to view
@@ -27,11 +28,12 @@
           ]
         %}
       #}
-
-        {% block nav %}
-          {# add dropdown variable here to the render_nav method to render dropdowns #}
-          {{ nav.render_nav(current_user) }}
-        {% endblock %}
+        {% if display_navigation is not defined %}
+            {% block nav %}
+              {# add dropdown variable here to the render_nav method to render dropdowns #}
+              {{ nav.render_nav(current_user) }}
+            {% endblock %}
+        {% endif %}
 
         {% include 'partials/_flashes.html' %}
         {# When extended, the content block contains all the html of the webpage #}

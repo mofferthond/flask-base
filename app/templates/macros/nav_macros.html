@@ -22,10 +22,11 @@
 {% macro header_items(current_user) %}
     {% set endpoints = [
       ('main.index', config.APP_NAME, 'home'),
-      ('main.about', 'About', 'info')
+      ('wakkerdam.games', 'Spellen', 'user'),
+      ('wakkerdam.characters', 'Karakters', '')
     ]%}
     {% set user = [] %}
-    {% if current_user.is_authenticated %}
+    {% if current_user.is_admin() %}
       {% set user = ([(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
     {% endif %} 
     {{ render_menu_items( endpoints +  user ) }}
@@ -37,14 +38,14 @@
 {% macro account_items(current_user) %}
     {% if current_user.is_authenticated %}
       {% set endpoints = [
-        ('account.manage', 'Your Account', 'settings'),
-        ('account.logout', 'Log out', 'sign out')
+        ('account.manage', 'Account', 'settings'),
+        ('account.logout', 'Uitloggen', 'sign out')
       ] %}
       {{ render_menu_items(endpoints) }}
     {% else %}
       {% set endpoints = [
-        ('account.register', 'Register', 'list layout'),
-        ('account.login', 'Log In', 'sign in')
+        ('account.register', 'Registreren', 'list layout'),
+        ('account.login', 'Inloggen', 'sign in')
       ] %}
       {{ render_menu_items(endpoints) }}
     {% endif %}

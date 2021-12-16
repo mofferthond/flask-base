@@ -1,0 +1,219 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+{% block content %}
+<div class="ui text container">
+    <h1>{{ game.getName() }}</h1>
+    <p>Dit is de pagina voor je spel, pas hier aan wat je aan wilt passen. Dit kan soms niet meer als het spel al is begonnen.</p>
+    <div class="ui segment grid">
+        <div class="eight wide column">
+            <h4 class="sixteen wide">Overzicht:</h4>
+        </div>
+        
+    {% if not game.hasStarted() %}
+        <div class="sixteen wide column">
+            <h2 class="sixteen wide" id="countdown">
+                Nog 0 dagen 0 uur 0 minuten 0 sedonden
+            </h2>
+        </div>    
+    
+        <script type="text/javascript">
+            // Set the date we're counting down to
+            var today = "{{ game.getStartDate() }}".replace(/-/g, " ")
+            var countDownDate = new Date(today).getTime();
+            
+            function setCountdown() {
+                 // Get today's date and time
+                var now = new Date().getTime();
+
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
+                
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                // Output the result in an element with id="demo"
+                document.querySelector('#countdown').innerHTML = "Nog "+ days + " dagen " + hours + " uur " + minutes + " minuten " + seconds + " seconden";
+            }
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+                setCountdown();
+            }, 1000);
+            window.onload = setCountdown();
+        </script>
+    {% else %}
+    <div class="sixteen wide column">
+        <div class="ui grid">
+            <div class="four wide column">
+                <p>Dag 3</p>
+            </div>
+            <div class="four wide column">
+                <p>{{ game.getDeadPlayerAmount() }} Dood</p>
+            </div>
+            <div class="four wide column">
+                <p>{{ game.getAlivePlayerAmount() }} Levend</p>
+            </div>
+        </div>
+        
+    </div>
+    
+    {% endif %}         
+    </div>
+    <div class="ui segment grid">
+        <div class="eight wide column">
+            <h4>Spelers:</h4>
+        </div>
+        <div class="eight wide column right aligned">
+            {% if not game.hasStarted() %}
+                <h3>{{ game.getPlayers()|length }}/{{ game.getPlayerAmount() }}</h3>
+            {% else %}
+                <h3>{{ game.getAlivePlayerAmount() }}/{{ game.getPlayers()|length }}</h3>
+            {% endif %}
+            
+        </div>
+        <div class="sixteen wide column">
+            {% for player in game.getPlayers(orderBy="isDead") %}
+            {% if player.isDead() %} 
+                {% set avatarUrl = 'images/small_gray/' + player.getUser().getAvatar() + '.jpg' %} 
+            {% else %} 
+                {% set avatarUrl = 'images/small/' + player.getUser().getAvatar() + '.jpg' %} 
+            {% endif %}
+                {% if game.getHostingUser() == current_user %}
+                    {% if player.getUser() != game.getHostingUser() %}
+                    <a class="ui image label" href="{{ url_for('wakkerdam.player_delete', playerId=player.getId(), gameId=game.getId()) }}" {% if player.isDead() %} style="text-decoration:line-through;" {% endif %}>
+                        <img src="{{ url_for('static', filename=avatarUrl) }}">
+                        {{ player.getUser().getFullName() }}
+                        <i class="delete icon"></i>
+                    </a>
+                    {% else %}
+                    <p class="ui image label underlined" {% if player.isDead() %} style="text-decoration-line: line-through underline; " {% endif %}>
+                        <img src="{{ url_for('static', filename=avatarUrl) }}">
+                        {{ player.getUser().getFullName() }}
+                    </p>
+                    {% endif %}
+                {% else %}
+                    {% if player.getUser() != game.getHostingUser() %}
+                    <p class="ui image label" {% if player.isDead() %} style="text-decoration:line-through;" {% endif %}>
+                        <img src="{{ url_for('static', filename=avatarUrl) }}">
+                        {{ player.getUser().getFullName() }}
+                    </p>
+                    {% else %}
+                    <p class="ui image label underlined" {% if player.isDead() %} style="text-decoration-line: line-through underline; " {% endif %}>
+                        <img src="{{ url_for('static', filename=avatarUrl) }}">
+                        {{ player.getUser().getFullName() }}
+                    </p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% if not game.hasStarted() %}
+            {% if game.getHostingUser() == current_user %}
+                {% if game.getPlayers()|length != game.getPlayerAmount() %}
+                
+                <div class="sixteen wide column">
+                    <h4>Spelers uitnodigen</h4>
+                    {% set flashes = {
+                        'error':   get_flashed_messages(category_filter=['form-error']),
+                        'warning': get_flashed_messages(category_filter=['form-check-email']),
+                        'info':    get_flashed_messages(category_filter=['form-info']),
+                        'success': get_flashed_messages(category_filter=['form-success'])
+                    } %}
+                    {{ f.begin_form(form, flashes) }}
+                        {{ f.render_form_field(form.email) }}
+                        {{ f.render_form_field(form.submit) }}
+                    {{ f.end_form(form) }}
+                </div>
+                {% endif %}
+                <div class="sixteen wide column">
+                    {% for invite in game.getInvites() %}
+                        <a class="ui image label" href="{{ url_for('wakkerdam.invite_delete', inviteId=invite.getId()) }}">
+                            <img src="{{ url_for('static', filename='images/small/' + invite.getUser().getAvatar() + '.jpg') }}">
+                            {{ invite.getUser().getFullName() }}
+                            <i class="delete icon"></i>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="sixteen wide column">
+                    <a href="{{ url_for('wakkerdam.leave', gameId=game.getId()) }}" class="ui button negative">Verlaat spel</a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="ui segment">
+        <h4>Krant:</h4>
+        <div class="ui grid">
+            {% set count = namespace(value=0) %}
+            {% for newspaper in game.getNewspapers() %}
+            <div class='column'>
+                <a class="ui segment grid center button left aligned" href="{{ url_for('wakkerdam.newspaper', newspaperId=newspaper.getId()) }}">
+                    <div class='one wide column'>
+                        <i class="newspaper icon large"></i>
+                    </div>
+                    <div class='fifteen wide column'>
+                        <h3>Wakkerdammer, {{ newspaper.getDateFormatted() }}</h3>
+                    </div>
+                </a>
+            </div>
+            {% set count.value = count.value + 1 %}
+            {% endfor %}
+
+        {% if count.value == 0 %}
+        <div class="sixteen wide column">
+            <p>Er is nog geen krant gepubliceerd. Dit gebeurd in de ochtend van de eerste dag.</p>
+        </div>
+        {% endif %}
+        </div>
+        
+    </div>
+    <div class="ui segment">
+        <h4>Beschikbare acties:</h4>
+        <div class="ui grid">
+            <div class='column'>
+                <a class="ui segment grid center button left aligned" href="">
+                  <div class='seven wide column'>
+                    <h2>Stemmen</h2>
+                  </div>
+                  <div class='three wide column'>
+                    
+                  </div>
+                </a>
+              </div>
+        </div>
+    </div>
+    <div class="ui segment">
+        <h4>Jouw chats:</h4>
+        <div class="ui grid">
+            {% for chat in game.getChatsForUser(current_user) %}
+            <div class='column'>
+                <a class="ui segment grid center button left aligned" href="{{ url_for('wakkerdam.chat', chatId=chat.getId()) }}">
+                  <div class='seven wide column'>
+                    <h2>{{ chat.getChatType().getName() }}</h2>
+                  </div>
+                  <div class='three wide column'>
+                    
+                  </div>
+                  <div class='three wide column'>
+                    <p>Opent: {{ chat.getChatType().getOpens() }}</p>
+                    <p>Sluit: {{ chat.getChatType().getCloses() }}</p>
+                  </div>
+                  {% if chat.getChatType().isOpen() %}
+                    <div class='three wide green column'>
+                        <h3 class="green">Nu open</h5>
+                    </div>
+                  {% else %}
+                    <div class='three wide red column center aligned'>
+                        <h3 class="red">Nu gesloten</h5>
+                    </div>
+                  {% endif %}
+                </a>
+              </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    
+{% endblock content %}

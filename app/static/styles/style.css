@@ -1,0 +1,53 @@
+@font-face {
+    font-family: 'Garamond';
+    src: url('../fonts/wakkerdam/GARA.TTF') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Garamond';
+    src: url('../fonts/wakkerdam/GARABD.TTF') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Garamond';
+    src: url('../fonts/wakkerdam/GARAIT.TTF') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+.invite_notification{
+    display: inline-block;
+    width:20px;
+    height:20px;
+    border-radius:10px;
+    color:#fff;
+    text-align:center;
+    background:rgb(189, 58, 58);
+}
+
+.invite_text{
+    display: inline-block;
+    margin:0;
+}
+
+.underlined{
+    text-decoration: underline;
+}
+
+.newspaperTitle{
+    font-size: 60px;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-family: "Garamond";
+}
+
+.newspaperDate{
+    font-family: "Garamond";
+    font-size: 18px;
+    position: absolute; 
+    bottom: 25px;
+}

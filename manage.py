@@ -9,6 +9,7 @@ from rq import Connection, Queue, Worker
 
 from app import create_app, db
 from app.models import Role, User
+from app.wakkerdam.models import *
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -17,7 +18,7 @@ migrate = Migrate(app, db)
 
 
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role)
+    return dict(app=app, db=db, User=User, Role=Role, Game=Game, Character=Character, Player=Player, Invite=Invite, ChatType=ChatType, Chat=Chat, Chatter=Chatter, Message=Message, ChatLog=ChatLog, Article=Article, Newspaper=Newspaper)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
@@ -43,6 +44,8 @@ def recreate_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
+    setup_dev()
+    add_standard()
 
 
 @manager.option(
@@ -62,7 +65,8 @@ def add_fake_data(number_users):
 @manager.command
 def setup_dev():
     """Runs the set-up needed for local development."""
-    setup_general()
+    
+    return setup_general()
 
 
 @manager.command
@@ -70,6 +74,14 @@ def setup_prod():
     """Runs the set-up needed for production."""
     setup_general()
 
+
+@manager.command
+def prefill():
+    """Prefills the tables ChatType, Character, ActionType, GroupType"""
+    
+    vill = regularVillager()
+    db.session.add(vill)
+    db.session.commit()
 
 def setup_general():
     """Runs the set-up needed for both local development and production.
@@ -83,10 +95,12 @@ def setup_general():
                 last_name='Account',
                 password=Config.ADMIN_PASSWORD,
                 confirmed=True,
-                email=Config.ADMIN_EMAIL)
+                email=Config.ADMIN_EMAIL,
+                avatar='steve')
             db.session.add(user)
             db.session.commit()
             print('Added administrator {}'.format(user.full_name()))
+            return user
 
 
 @manager.command
@@ -116,6 +130,45 @@ def format():
     print('Running {}'.format(yapf))
     subprocess.call(yapf, shell=True)
 
+@manager.command
+def add_standard():
+    setup_general()
+    admin = User.query.filter_by(id=1).first()
+    user = User(confirmed=1, first_name='Daniël', last_name='Kuiper', email='mofferthond@gmail.com', password=Config.ADMIN_PASSWORD, role_id=1, avatar='steve')
+    db.session.add(user)
+    village_chat = ChatType(name='Dorpchat', opens='1100', closes='1900')
+    db.session.add(village_chat)
+
+    first_game = Game(name='Eerste spel', ongoing=1, startDate='2030-12-12', hostingUser=user, playerAmount=10)
+    db.session.add(first_game)
+    first_player = Player(user=admin, game=first_game, character=None)
+    db.session.add(first_player)
+    second_player = Player(user=user, game=first_game, character=None)
+    db.session.add(second_player)
+    first_chat = Chat(game=first_game, chatType=village_chat)
+    db.session.add(first_chat)
+    first_chatter = Chatter(player=first_player, chat=first_chat)
+    db.session.add(first_chatter)
+    second_chatter = Chatter(player=second_player, chat=first_chat)
+    db.session.add(second_chatter)
+
+    first_message = Message(chatter=first_chatter, text='Eerste bericht!', timestamp=1637415000)
+    db.session.add(first_message)
+    second_message = Message(chatter=second_chatter, text='Tweede bericht!', timestamp=1637415060)
+    db.session.add(second_message)
+    first_reply = Message(chatter=second_chatter, text='Eerste reactie?', replyTo=first_message, timestamp=1637415600)
+    db.session.add(first_reply)
+
+
+    first_newspaper = Newspaper(game=first_game, date="2021-12-23")
+    db.session.add(first_newspaper)
+    first_article = Article(text="Ik denk dat Admin Account wolf is.", publisher="de Ziener", playerCreated=first_player, newspaper=first_newspaper)
+    db.session.add(first_article)
+    second_article = Article(text="Ik weet dat Daniel Kuiper wolf is.", publisher="de Journalist", playerCreated=second_player, newspaper=first_newspaper)
+    db.session.add(second_article)
+
+    db.session.commit()
+    print('Added fake data')
 
 if __name__ == '__main__':
     manager.run()

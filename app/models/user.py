@@ -21,6 +21,33 @@ class Role(db.Model):
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, name):
+        self.name = name
+
+    def getIndex(index):
+        return self.index
+
+    def setIndex(self, index):
+        self.index = index
+
+    def getDefault(self):
+        return self.default
+
+    def setDefault(self, default):
+        self.default = default
+
+    def getPermissions(self):
+        return self.permissions
+
+    def setPermissions(self, permissions):
+        self.permissions = permissions
+
     @staticmethod
     def insert_roles():
         roles = {
@@ -54,6 +81,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    avatar = db.Column(db.String(16), default='default')
+
+    # referenced
+    _players = db.relationship("Player")
+    _invites = db.relationship("Invite")
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -63,6 +95,63 @@ class User(UserMixin, db.Model):
                     permissions=Permission.ADMINISTER).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
+
+    def getId(self):
+        return self.id
+
+    def getConfirmed(self):
+        return self.confirmed
+
+    def setConfirmed(self, confirmed):
+        self.confirmed = confirmed
+        
+    def getFirstName(self):
+        return self.firstName
+
+    def setFirstName(self, firstName):
+        self.firstName = firstName
+
+    def getLastName(self):
+        return self.lastName
+
+    def setLastName(self, lastName):
+        self.lastName = lastName
+
+    def getEmail(self):
+        return self.email
+
+    def setEmail(self, email):
+        self.email = email
+
+    def getPasswordHash(self):
+        return self.passwordHash
+
+    def setPasswordHash(self, passwordHash):
+        self.passwordHash = passwordHash
+
+    def getRole(self):
+        return self.role
+
+    def setRole(self, role):
+        self.role = role
+
+    def getAvatar(self):
+        return self.avatar
+
+    def setAvatar(self, avatar):
+        self.avatar = avatar
+
+    def getPlayers(self):
+        return self._players
+
+    def getInvites(self):
+        return self._invites
+    
+    def getInviteAmount(self):
+        return len(self.getInvites())
+
+    def getFullName(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)

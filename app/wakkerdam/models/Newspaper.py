@@ -6,7 +6,7 @@ class Newspaper(db.Model):
     __tablename__ = "newspapers"
     _id = db.Column("id", db.Integer, primary_key=True, autoincrement=True)
     _game = db.relationship("Game")
-    _gameId = db.Column("game", db.Integer, db.ForeignKey("games.id"))
+    _gameId = db.Column("gameId", db.Integer, db.ForeignKey("games.id"))
     _date = db.Column("date", db.String(10))
     _format = db.Column("format", db.String)
 
@@ -48,7 +48,6 @@ class Newspaper(db.Model):
 
     def createFormat(self):
         articles = self.getArticles()[:]
-        print(articles)
         result = []
         # Add the admin articles to articles
         random.shuffle(articles)
@@ -151,6 +150,6 @@ class Newspaper(db.Model):
 
 
             rowCount = rowCount + 1
-        self.setFormat(str(result))
+        return str(result)
                 
 

@@ -27,6 +27,11 @@ manager.add_command('runserver', Server(host="0.0.0.0"))
 
 
 @manager.command
+def delete_db():
+    db.drop_all()
+    print("Databases deleted")
+
+@manager.command
 def test():
     """Run the unit tests."""
     import unittest
@@ -168,6 +173,7 @@ def add_standard():
     db.session.add(second_article)
 
     db.session.commit()
+    first_newspaper.setFormat(first_newspaper.createFormat())
     print('Added fake data')
 
 if __name__ == '__main__':

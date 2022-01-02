@@ -4,6 +4,179 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/placeholder.min.css') }}">
 {% endblock %}
 
+{% macro group1(articles) %}
+<div class="row">
+    {% for articleId in articles %}
+    <div class="four wide column">
+        {% if articleId == None %}
+        <div class="ui placeholder">
+            <div class="paragraph">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        {% else %}
+        <div>
+            {{ article(articleId) }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro group2(articles) %}
+<div class="row">
+    {% set count = namespace(value=0) %}
+    {% for articleId in articles %}
+        {% if articleId == None %}
+        <div class="four wide column">
+            <div class="ui placeholder">
+                <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+        {% elif articleId == 0 %}
+            {% if count.value == 0  %}
+                <div class="eight wide column">
+                    {{ image() }}
+                </div>
+                {% set count.value = count.value + 1 %}
+            {% endif %}
+        {% else %}
+            <div class="four wide column">
+                {{ article(articleId) }}
+            </div>
+        {% endif %}
+
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro group3(articles) %}
+    <div class="row">
+        {% if articles[0] == 0 %}
+        <div class="eight wide column">
+            {{ image() }}
+        </div>
+            
+        {% endif %}
+        <div class="eight wide column" style="padding:0;">
+            
+            <div class="ui internally celled grid">
+                {% if articles[1] == 0 %}
+                    <div class="eight wide column">
+                        {{ giantplaceholder() }}
+                    </div>
+                {% endif %}
+                <div class="eight wide column" style="padding:0;">
+                    <div class="ui internally celled grid">
+                        <div class="row">
+                            <div class="sixteen wide column">
+                                {% if articles[2] == None %}
+                                    {{ placeholder() }}
+                                {% else %}
+                                    {{ article(articles[2]) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="sixteen wide column"">
+                                {% if articles[3] == None %}
+                                    {{ placeholder() }}
+                                {% else %}
+                                    {{ article(articles[3]) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if articles[1] == 1 %}
+                    <div class="eight wide column">
+                        {{ giantplaceholder() }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if articles[0] == 1 %}
+            <div class="eight wide column">
+                {{ image() }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro article(id) %}
+<div class="newspaperArticle">
+    <p>
+        {{ newspaper.getArticleById(id).getText() }}
+    </p>
+    <h5 class="right aligned">
+        - "{{ newspaper.getArticleById(id).getPublisher() }}"
+    </h5>
+</div>
+
+{% endmacro %}
+
+{% macro image() %}
+    <div class="ui placeholder"  style="max-width: 100%; height: 100%;">
+        <div class="image"></div>
+    </div>
+{% endmacro %}
+
+{% macro placeholder() %}
+<div class="ui placeholder">
+    <div class="paragraph">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro giantplaceholder() %}
+<div class="ui placeholder">
+    <div class="paragraph">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+</div>
+{% endmacro %}
+
 {% block content %}
 <div class="ui container">
     <div class="ui internally celled grid">
@@ -32,171 +205,15 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="four wide column">
-                <div class="ui placeholder">
-                    <div class="paragraph">
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                    </div>
-                  </div>
-            </div>
-            <div class="eight wide column">
-                <div class="ui placeholder"  style="max-width: 100%; height: 100%;">
-                    <div class="image"></div>
-                </div>
-            </div>
-            <div class="four wide column">
-                
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="four wide column">
-                
-            </div>
-            <div class="four wide column">
-                <div class="ui placeholder">
-                    <div class="paragraph">
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                    </div>
-                  </div>
-            </div>
-            <div class="four wide column">
-                
-            </div>
-            <div class="four wide column">
-                <div class="ui placeholder">
-                    <div class="paragraph">
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                    </div>
-                  </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="four wide column">
-                <div class="ui placeholder">
-                    <div class="paragraph">
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                    </div>
-                  </div>
-            </div>
-            <div class="four wide column">
-                <div class="ui placeholder">
-                    <div class="paragraph">
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                    </div>
-                  </div>
-            </div>
-            <div class="four wide column">
-                
-            </div>
-            <div class="four wide column">
-                <div class="ui placeholder">
-                    <div class="paragraph">
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                      <div class="line"></div>
-                    </div>
-                  </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="eight wide column">
-                <div class="ui placeholder"  style="max-width: 100%; height: 100%;">
-                    <div class="image"></div>
-                </div>
-            </div>
-            <div class="eight wide column">
-                <div class="ui grid">
-                    <div class="eight wide column">
-                        <div class="ui placeholder">
-                            <div class="paragraph">
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                            </div>
-                          </div>
-                    </div>
-                    <div class="eight wide column">
-                        <div class="ui placeholder">
-                            <div class="paragraph">
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                              <div class="line"></div>
-                            </div>
-                          </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+        {% for row in newspaper.getFormatList() %}
+            {% if row[0] == 1 %}
+                {{ group1(row[1]) }}
+            {% elif row[0] == 2 %}
+                {{ group2(row[1]) }}
+            {% elif row[0] == 3 %}
+                {{ group3(row[1]) }}
+            {% endif %}
+        {% endfor %}
     </div>
-    
 </div>
 {% endblock content %}

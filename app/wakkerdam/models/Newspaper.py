@@ -1,6 +1,7 @@
 from app import db
 from datetime import datetime
 import random
+import ast
 
 class Newspaper(db.Model):
     __tablename__ = "newspapers"
@@ -150,6 +151,22 @@ class Newspaper(db.Model):
 
 
             rowCount = rowCount + 1
+        print(result)
         return str(result)
-                
+    
+    def refresh(self):
+        self.setFormat(self.createFormat())
+
+    def getFormatList(self):
+        return ast.literal_eval(self.getFormat())
+
+    def getArticleById(self, id):
+        articles = self.getArticles()
+        for article in articles:
+            if article.getId() == id:
+                return article
+        return None
+        
+
+
 

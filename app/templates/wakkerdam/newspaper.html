@@ -183,14 +183,16 @@
         <div class="row">
             <div class="ui grid" style="width:100%; margin-left: 0; margin-right: 0;">
                 
-                <div class="eight wide column">
+                <div class="six wide column">
                     {% if newspaper.getPrevious() != None %}
                     <a href="{{ url_for('wakkerdam.newspaper', newspaperId=newspaper.getPrevious().getId()) }}"><<< de krant van gister</a>
                     {% endif %}
                 </div>
                 
-                
-                <div class="eight wide right aligned column">
+                <div class="four wide center aligned column">
+                    <a href="{{ url_for('wakkerdam.game', gameId=newspaper.getGame().getId()) }}">terug naar speloverzicht</a>
+                </div>
+                <div class="six wide right aligned column">
                     {% if newspaper.getNext() != None %}
                     <a href="{{ url_for('wakkerdam.newspaper', newspaperId=newspaper.getNext().getId()) }}">de krant van morgen >>></a>
                     {% endif %}

@@ -147,15 +147,17 @@
         <div class="ui grid">
             {% set count = namespace(value=0) %}
             {% for newspaper in game.getNewspapers() %}
-            <div class='column'>
-                <a class="ui segment grid center button left aligned" href="{{ url_for('wakkerdam.newspaper', newspaperId=newspaper.getId()) }}">
-                    <div class='one wide column'>
-                        <i class="newspaper icon large"></i>
-                    </div>
-                    <div class='fifteen wide column'>
-                        <h3>Wakkerdammer, {{ newspaper.getDateFormatted() }}</h3>
-                    </div>
-                </a>
+            <div class='row' style="padding: 0;">
+                <div class="sixteen wide column">
+                    <a class="ui segment grid center button left aligned" href="{{ url_for('wakkerdam.newspaper', newspaperId=newspaper.getId()) }}">
+                        <div class='one wide column'>
+                            <i class="newspaper icon large"></i>
+                        </div>
+                        <div class='fifteen wide column'>
+                            <h3>Editie {{ newspaper.getDay() }}, {{ newspaper.getDateFormatted() }}</h3>
+                        </div>
+                    </a>                   
+                </div>
             </div>
             {% set count.value = count.value + 1 %}
             {% endfor %}

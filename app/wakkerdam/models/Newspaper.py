@@ -189,7 +189,17 @@ class Newspaper(db.Model):
                 return article
         return None
 
-        
+    def getNext(self):
+        for newspaper in self.getGame().getNewspapers():
+            if newspaper.getDay() - self.getDay() == 1:
+                return newspaper
+        return None
+
+    def getPrevious(self):
+        for newspaper in self.getGame().getNewspapers():
+            if newspaper.getDay() - self.getDay() == -1:
+                return newspaper
+        return None
 
 
 

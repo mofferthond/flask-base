@@ -182,12 +182,20 @@
     <div class="ui internally celled grid">
         <div class="row">
             <div class="ui grid" style="width:100%; margin-left: 0; margin-right: 0;">
+                
                 <div class="eight wide column">
-                    <a href=""><<< de krant van gister</a>
+                    {% if newspaper.getPrevious() != None %}
+                    <a href="{{ url_for('wakkerdam.newspaper', newspaperId=newspaper.getPrevious().getId()) }}"><<< de krant van gister</a>
+                    {% endif %}
                 </div>
+                
+                
                 <div class="eight wide right aligned column">
-                    <a href="">de krant van morgen >>></a>
+                    {% if newspaper.getNext() != None %}
+                    <a href="{{ url_for('wakkerdam.newspaper', newspaperId=newspaper.getNext().getId()) }}">de krant van morgen >>></a>
+                    {% endif %}
                 </div>
+               
                 <div class="two wide column">
                     <div class="newspaperDate">
                         Editie {{ newspaper.getDay() }}

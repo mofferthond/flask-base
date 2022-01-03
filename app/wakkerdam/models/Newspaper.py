@@ -43,6 +43,23 @@ class Newspaper(db.Model):
 
     def setFormat(self, format):
         self._format = format
+    
+    def getDay(self):
+        # date of first newspaper of game - date of this newspaper
+        year, month, day = int(self.getDate()[:4]), int(self.getDate()[5:7]), int(self.getDate()[8:])
+        selfDate = datetime(year, month, day)
+
+        lowestDate = datetime.now()
+        for newspaper in self.getGame().getNewspapers():
+            year, month, day = int(newspaper.getDate()[:4]), int(newspaper.getDate()[5:7]), int(newspaper.getDate()[8:])
+            date = datetime(year, month, day)
+            if date < lowestDate:
+                lowestDate = date
+        return abs((selfDate - lowestDate).days) + 1
+       
+
+    def setDay(self, day):
+        self._day = day
 
     def getArticles(self):
         return self._articles
@@ -171,6 +188,7 @@ class Newspaper(db.Model):
             if article.getId() == id:
                 return article
         return None
+
         
 
 

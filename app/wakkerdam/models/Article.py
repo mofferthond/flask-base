@@ -9,6 +9,7 @@ class Article(db.Model):
     _playerCreatedId = db.Column("playerCreatedId", db.Integer, db.ForeignKey("players.id"))
     _newspaper = db.relationship("Newspaper")
     _newspaperId = db.Column("newspaperId", db.Integer, db.ForeignKey("newspapers.id"))
+    # publisher & playerCreated are None for admin articles like "John Doe has been killed"
     
 
     def __init__(self, text, publisher, playerCreated, newspaper):

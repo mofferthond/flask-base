@@ -121,15 +121,21 @@
 {% endmacro %}
 
 {% macro article(id) %}
+{% set article = newspaper.getArticleById(id) %}
 <div class="newspaperArticle">
-    <p>
-        {{ newspaper.getArticleById(id).getText() }}
-    </p>
-    <h5 class="right aligned">
-        - "{{ newspaper.getArticleById(id).getPublisher() }}"
-    </h5>
+    {% if article.getPlayerCreated() == None %}
+        <p class="redaction">
+            {{ article.getText() }}
+        </p>
+    {% else %}
+        <p>
+            {{ article.getText() }}
+        </p>
+        <h5 class="right aligned">
+            - "{{ article.getPublisher() }}"
+        </h5>
+    {% endif %}
 </div>
-
 {% endmacro %}
 
 {% macro image() %}

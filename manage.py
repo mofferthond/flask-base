@@ -171,6 +171,8 @@ def add_standard():
     db.session.add(first_article)
     second_article = Article(text="Ik weet dat Daniel Kuiper wolf is.", publisher="de Journalist", playerCreated=second_player, newspaper=first_newspaper)
     db.session.add(second_article)
+    admin_article = Article(text="Admin Account is vannacht vermoord.", publisher=None, playerCreated=None, newspaper=first_newspaper)
+    db.session.add(admin_article)
 
     db.session.commit()
     first_newspaper.setFormat(first_newspaper.createFormat())

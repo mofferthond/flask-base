@@ -52,6 +52,10 @@ class Newspaper(db.Model):
         result = []
         # Add the admin articles to articles
         random.shuffle(articles)
+
+        randomFactor = (1/20 * (len(articles)) + 0.15)
+        print(randomFactor)
+
         while (len(articles) > 0):
             rand = random.randint(1, 101)
 
@@ -59,7 +63,8 @@ class Newspaper(db.Model):
             if rand < 50:
                 innerResult = (1,[])
                 for x in range(0,4):
-                    if random.randint(0,3) == 0:
+                    # Display article chance
+                    if random.random() <= randomFactor:
                         if len(articles) == 0:
                             innerResult[1].append(None)
                         else:
@@ -93,7 +98,7 @@ class Newspaper(db.Model):
                         imageSet = True
 
                     # Display article chance
-                    if random.randint(0,1) == 0:
+                    if random.random() <= randomFactor:
                         if len(articles) == 0:
                             innerResult[1].append(None)
                         else:
@@ -125,7 +130,7 @@ class Newspaper(db.Model):
                 innerResult[1].append(random.randint(0,1))
 
                 for x in range(0,2):
-                    if random.randint(0,1) == 0:
+                    if random.random() <= randomFactor:
                         if len(articles) == 0:
                             innerResult[1].append(None)
                         else:

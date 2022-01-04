@@ -108,6 +108,16 @@ class Detective(Villager):
             self,
             name="Detective", 
             description="De detective is een burger die elke nacht twee spelers uit kan kiezen. Van deze spelers krijg je vervolgens te weten of ze in het zelfde kamp zitten. (Wolf & Wolf, Burger & Burger, stelletje)", 
-            shortDescription="Kan 2 spelers vergelijken en zien of ze in het zelfde kamp zitten.", 
+            shortDescription="Kan 2 spelers vergelijken en zien of ze in het zelfde kamp zitten", 
             tag="detective"
+        )
+
+class Journalist(Villager):
+    def __init__(self):
+        Villager.__init__(
+            self,
+            name="Journalist", 
+            description="De journalist kan van één krantenartikel per dag kijken of deze geschreven is door een wolf of door een burger.", 
+            shortDescription="Kan van krantenartikelen kijken of deze door een wolf is geschreven", 
+            tag="journalist"
         )

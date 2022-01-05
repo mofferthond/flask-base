@@ -82,6 +82,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     avatar = db.Column(db.String(16), default='default')
+    language = db.Column(db.String, default='en_US')
 
     # referenced
     _players = db.relationship("Player")

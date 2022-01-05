@@ -107,7 +107,8 @@ def setup_general():
                 password=Config.ADMIN_PASSWORD,
                 confirmed=True,
                 email=Config.ADMIN_EMAIL,
-                avatar='steve')
+                avatar='steve',
+                language='nl_NL')
             db.session.add(user)
             db.session.commit()
             print('Added administrator {}'.format(user.full_name()))
@@ -145,7 +146,7 @@ def format():
 def add_standard():
     setup_general()
     admin = User.query.filter_by(id=1).first()
-    user = User(confirmed=1, first_name='Daniël', last_name='Kuiper', email='mofferthond@gmail.com', password=Config.ADMIN_PASSWORD, role_id=1, avatar='steve')
+    user = User(confirmed=1, first_name='Daniël', last_name='Kuiper', email='mofferthond@gmail.com', password=Config.ADMIN_PASSWORD, role_id=1, avatar='steve', language="nl_NL")
     db.session.add(user)
     village_chat = ChatType(name='Dorpchat', opens='1100', closes='1900')
     db.session.add(village_chat)

@@ -10,7 +10,8 @@ env*
 dist
 *.egg
 *.egg-info
-*.sqlite
+data-dev.sqlite
+data.sqlite
 .idea
 dump.rdb
 .vscode/

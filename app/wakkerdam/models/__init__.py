@@ -9,3 +9,5 @@ from app.wakkerdam.models.Invite import Invite
 from app.wakkerdam.models.Message import Message
 from app.wakkerdam.models.Newspaper import Newspaper
 from app.wakkerdam.models.Player import Player
+
+from app.wakkerdam.models.Localization import Localization

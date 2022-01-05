@@ -18,7 +18,7 @@ migrate = Migrate(app, db)
 
 
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role, Game=Game, Character=Character, Player=Player, Invite=Invite, ChatType=ChatType, Chat=Chat, Chatter=Chatter, Message=Message, ChatLog=ChatLog, Article=Article, Newspaper=Newspaper)
+    return dict(app=app, db=db, User=User, Role=Role, Game=Game, Character=Character, Player=Player, Invite=Invite, ChatType=ChatType, Chat=Chat, Chatter=Chatter, Message=Message, ChatLog=ChatLog, Article=Article, Newspaper=Newspaper, Localization=Localization)
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
@@ -46,11 +46,17 @@ def recreate_db():
     Recreates a local database. You probably should not use this on
     production.
     """
-    db.drop_all()
-    db.create_all()
+    db.drop_all(bind=None)
+    db.create_all(bind=None)
     db.session.commit()
     setup_dev()
     add_standard()
+
+@manager.command
+def create_localization():
+    db.create_all(bind="localization")
+    db.create_all(bind="localization")
+
 
 
 @manager.option(

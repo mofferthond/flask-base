@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="ui container">
-      <h1>Jouw spellen</h1>
+      <h1>{{ locale("[GAMES_TITLE]") }}</h1>
       <div class="ui grid">
         <div class="ten wide column">
           <p>Hallo {{ current_user.getFullName() }}</br>Hieronder vind je de spellen waar je nu aan mee doet:</p>

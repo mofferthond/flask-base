@@ -16,6 +16,21 @@ def register_template_utils(app):
         from wtforms.fields import HiddenField
         return isinstance(field, HiddenField)
 
+    @app.template_global()
+    def locale(tag):
+        from app.wakkerdam.models.Localization import Localization
+        from flask_login import current_user
+        
+        # @returns text for tag with CU's language, else English
+        if current_user != None:
+            language = "nl_NL"
+        else:
+            language = "en_EN"
+        localization = Localization.query.filter_by(tag=tag, language=language).first()
+        if localization == None:
+            raise Exception(f"Text could not be found for tag: {tag} and language: {language}")
+        return localization.text
+
     app.add_template_global(index_for_role)
 
 

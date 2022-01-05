@@ -142,6 +142,12 @@ class User(UserMixin, db.Model):
     def setAvatar(self, avatar):
         self.avatar = avatar
 
+    def getLanguage(self):
+        return self.language
+
+    def setLanguage(self, language):
+        self.language = language
+
     def getPlayers(self):
         return self._players
 

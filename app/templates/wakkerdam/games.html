@@ -2,23 +2,23 @@
 
 {% block content %}
     <div class="ui container">
-      <h1>{{ locale("[GAMES_TITLE]") }}</h1>
+      <h1>{{ locale( "[GAMES_TITLE]" ) }}</h1>
       <div class="ui grid">
         <div class="ten wide column">
-          <p>Hallo {{ current_user.getFullName() }}</br>Hieronder vind je de spellen waar je nu aan mee doet:</p>
+          <p>{{ locale( "[GAMES_INTRO]" ) }}:</p>
         </div>
         <div class="six wide right aligned column">
           <a class="ui button primary" href="{{ url_for('wakkerdam.new_game') }}">
             <div class="visible content">
               <p>
-                Nieuw spel
+                {{ locale( "[GAMES_NEW_GAME]" ) }}
               </p>
             </div>
           </a>
           <a class="ui button" href="{{ url_for('wakkerdam.invite') }}">
             <div class="visible content">
               <p class="invite_text">
-                Uitnodigingen 
+                {{ locale( "[GAMES_INVITES]" ) }} 
               </p>
               {% if current_user.getInviteAmount() > 0 %}
               <p class="invite_notification">
@@ -31,7 +31,7 @@
         
       </div>
       <div id='current_games'>
-        <p>Spellen die bezig zijn:</p>
+        <p>{{ locale( "[GAMES_ONGOING]" ) }}:</p>
         {% set count = namespace(value=0) %}
         {% for game in games %}
           {% if game.getOngoing() == 1 %}
@@ -41,15 +41,15 @@
                 <h2>{{ game.getName() }}</h2>
               </div>
               <div class='four wide column'>
-                <h5>Host:</h5>
+                <h5>{{ locale( "[GAME_HOST]" ) }}:</h5>
                 <p>{{ game.getHostingUser().getFullName() }}</p>
               </div>
               <div class='three wide column'>
-                <h5>Start datum:</h5>
+                <h5>{{ locale( "[GAME_START_DATE]" ) }}:</h5>
                 <p>{{ game.getStartDate() }}</p>
               </div>
               <div class='three wide column'>
-                <h5>Aantal spelers:</h5>
+                <h5>{{ locale( "[GAME_PLAYER_AMOUNT]" ) }}:</h5>
                 <p>{{ game.getPlayerAmount() }}</p>
               </div>
             </a>
@@ -59,11 +59,11 @@
         {% endfor %}
 
         {% if count.value == 0 %}
-        <p class="three wide column">Er zijn hier geen spellen</p>
+        <p class="three wide column">{{ locale( "[GAMES_NONE]" ) }}</p>
         {% endif %}
       </div>
       <div id='past_games'>
-        <p>Spellen die afgelopen zijn:</p>
+        <p>{{ locale( "[GAMES_ENDED]" ) }}:</p>
         {% set count = namespace(value=0) %}
         {% for game in games %}
           {% if game.getOngoing == 0 %}
@@ -73,15 +73,15 @@
                 <h2>{{ game.getName() }}</h2>
               </div>
               <div class='four wide column'>
-                <h5>Host:</h5>
+                <h5>{{ locale( "[GAME_HOST]" ) }}:</h5>
                 <p>{{ game.getHostingUser().getFullName() }}</p>
               </div>
               <div class='three wide column'>
-                <h5>Start datum:</h5>
+                <h5>{{ locale( "[GAME_START_DATE]" ) }}:</h5>
                 <p>{{ game.getStartDate() }}</p>
               </div>
               <div class='three wide column'>
-                <h5>Aantal spelers:</h5>
+                <h5>{{ locale( "[GAME_PLAYER_AMOUNT]" ) }}:</h5>
                 <p>{{ game.getPlayerAmount() }}</p>
               </div>
             </div>
@@ -92,7 +92,7 @@
 
         {% if count.value == 0 %}
         <div class="sixteen wide column">
-          <p>Er zijn hier geen spellen</p>
+          <p>{{ locale( "[GAMES_NONE]" ) }}</p>
         </div>
         {% endif %}
       </div>

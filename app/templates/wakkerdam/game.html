@@ -3,16 +3,16 @@
 {% block content %}
 <div class="ui text container">
     <h1>{{ game.getName() }}</h1>
-    <p>Dit is de pagina voor je spel, pas hier aan wat je aan wilt passen. Dit kan soms niet meer als het spel al is begonnen.</p>
+    <p>{{ locale( "[GAME_INTRO]" ) }}</p>
     <div class="ui segment grid">
         <div class="eight wide column">
-            <h4 class="sixteen wide">Overzicht:</h4>
+            <h4 class="sixteen wide">{{ locale( "[GAME_OVERVIEW]" ) }}:</h4>
         </div>
         
     {% if not game.hasStarted() %}
         <div class="sixteen wide column">
             <h2 class="sixteen wide" id="countdown">
-                Nog 0 dagen 0 uur 0 minuten 0 sedonden
+                0
             </h2>
         </div>    
     
@@ -35,7 +35,7 @@
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
                 
                 // Output the result in an element with id="demo"
-                document.querySelector('#countdown').innerHTML = "Nog "+ days + " dagen " + hours + " uur " + minutes + " minuten " + seconds + " seconden";
+                document.querySelector('#countdown').innerHTML = '{{ locale( "[GAME_STARTS_IN]" ) }} ' + days + ' {{ locale( "[GAME_DAYS_LEFT]" ) }} ' + hours + ' {{ locale( "[GAME_HOURS_LEFT]" ) }} ' + minutes + ' {{ locale( "[GAME_MINUTES_LEFT]" ) }} ' + seconds + ' {{ locale( "[GAME_SECONDS_LEFT]" ) }}';
             }
             // Update the count down every 1 second
             var x = setInterval(function() {
@@ -63,7 +63,7 @@
     </div>
     <div class="ui segment grid">
         <div class="eight wide column">
-            <h4>Spelers:</h4>
+            <h4>{{ locale( "[GAME_PLAYERS]" ) }}:</h4>
         </div>
         <div class="eight wide column right aligned">
             {% if not game.hasStarted() %}
@@ -137,7 +137,7 @@
                 </div>
             {% else %}
                 <div class="sixteen wide column">
-                    <a href="{{ url_for('wakkerdam.leave', gameId=game.getId()) }}" class="ui button negative">Verlaat spel</a>
+                    <a href="{{ url_for('wakkerdam.leave', gameId=game.getId()) }}" class="ui button negative">{{ locale( "[GAME_LEAVE]" ) }}</a>
                 </div>
             {% endif %}
         {% endif %}

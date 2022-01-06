@@ -3,7 +3,6 @@ from wtforms.fields import Field
 from wtforms.widgets import HiddenInput
 from wtforms.compat import text_type
 
-
 def register_template_utils(app):
     """Register Jinja 2 helpers (called from __init__.py)."""
 
@@ -16,13 +15,15 @@ def register_template_utils(app):
         from wtforms.fields import HiddenField
         return isinstance(field, HiddenField)
 
-    @app.template_global()
-    def locale(tag):
+    app.add_template_global(locale)
+    app.add_template_global(index_for_role)
+
+def locale(tag):
         from app.wakkerdam.models.Localization import Localization
         from flask_login import current_user
 
         # @returns text for tag with CU's language, else English
-        if current_user != None:
+        if current_user.is_authenticated:
             language = current_user.getLanguage()
         else:
             language = "en_US"
@@ -30,9 +31,6 @@ def register_template_utils(app):
         if localization == None:
             raise Exception(f"Text could not be found for tag: {tag} and language: {language}")
         return localization.text
-
-    app.add_template_global(index_for_role)
-
 
 def index_for_role(role):
     return url_for(role.index)

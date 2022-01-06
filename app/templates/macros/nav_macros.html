@@ -21,9 +21,9 @@
 
 {% macro header_items(current_user) %}
     {% set endpoints = [
-      ('main.index', config.APP_NAME, 'home'),
-      ('wakkerdam.games', 'Spellen', 'user'),
-      ('wakkerdam.characters', 'Karakters', '')
+      ('main.index', locale( "[SITE_GAME_NAME]" ), 'home'),
+      ('wakkerdam.games', locale( "[GAMES]" ), 'user'),
+      ('wakkerdam.characters', locale( "[CHARACTERS]" ), '')
     ]%}
     {% set user = [] %}
     {% if current_user.is_admin() %}
@@ -38,14 +38,14 @@
 {% macro account_items(current_user) %}
     {% if current_user.is_authenticated %}
       {% set endpoints = [
-        ('account.manage', 'Account', 'settings'),
-        ('account.logout', 'Uitloggen', 'sign out')
+        ('account.manage', locale( "[ACCOUNT_ACCOUNT]" ), 'settings'),
+        ('account.logout', locale( "[ACCOUNT_LOG_OUT]" ), 'sign out')
       ] %}
       {{ render_menu_items(endpoints) }}
     {% else %}
       {% set endpoints = [
-        ('account.register', 'Registreren', 'list layout'),
-        ('account.login', 'Inloggen', 'sign in')
+        ('account.register', locale( "[ACCOUNT_REGISTER]" ), 'list layout'),
+        ('account.login', locale( "[ACCOUNT_LOG_IN]" ), 'sign in')
       ] %}
       {{ render_menu_items(endpoints) }}
     {% endif %}

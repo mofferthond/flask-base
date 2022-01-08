@@ -43,6 +43,10 @@ class Player(db.Model):
         for actor in self.getActors():
             if actor.isActive():
                 result.append(actor)
+
+        if len(result) > 1 and True in [isinstance(actor, Dead) for actor in result]:
+            raise Exception(f"Dead is not the only actor active for player {self.getId()}")
+            
         return result
 
     def isDead(self):

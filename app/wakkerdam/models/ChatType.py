@@ -3,6 +3,7 @@ from datetime import datetime
 
 class ChatType(db.Model):
     __tablename__ = "chatTypes"
+    __bind_key__ = "constants"
     _id = db.Column("id", db.Integer, primary_key=True, autoincrement=True)
     _name = db.Column("name", db.String(64))
     _opens = db.Column("opens", db.String(4))

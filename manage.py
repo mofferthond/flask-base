@@ -53,9 +53,9 @@ def recreate_db():
     add_standard()
 
 @manager.command
-def create_localization():
-    db.create_all(bind="localization")
-    db.create_all(bind="localization")
+def recreate_constants():
+    db.create_all(bind="constants")
+    db.session.commit()
 
 
 
@@ -153,9 +153,9 @@ def add_standard():
 
     first_game = Game(name='Eerste spel', ongoing=1, startDate='2030-12-12', hostingUser=user, playerAmount=10)
     db.session.add(first_game)
-    first_player = Player(user=admin, game=first_game, character=None)
+    first_player = Player(user=admin, game=first_game)
     db.session.add(first_player)
-    second_player = Player(user=user, game=first_game, character=None)
+    second_player = Player(user=user, game=first_game)
     db.session.add(second_player)
     first_chat = Chat(game=first_game, chatType=village_chat)
     db.session.add(first_chat)

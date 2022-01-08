@@ -1,0 +1,51 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="ui text container">
+    <h1>Spelinstellingen</h1>
+    <p>Kies hier de karakters die je wilt gebruiken voor het spel: {{ game.getName() }}</p>
+    <div class="ui segment grid">
+        <div class="sixteen wide column">
+            <h4>Gekozen karakters:</h4>
+        </div>
+        {% set count = namespace(value=0) %}
+        {% for character in game.getCharacters() %}
+            {% set count.value = count.value + 1 %}
+            {{ character.getName() }}
+        {% endfor %}
+        {% if count.value == 0 %}
+        <div class="sixteen wide column">
+            <p>Je hebt nog geen karakters uitgekozen voor dit spel.</p>
+        </div>
+        {% endif %}
+    </div>
+    <div class="ui segment grid">
+        <div class="sixteen wide column">
+            <h4>Alle karakters:</h4>
+        </div>
+        <div class="sixteen wide column">
+            <h5>Slecht:</h5>
+            {% for character in CHARACTERS %}
+                {% if CHARACTERS[character]["alliance"] == "BAD" %}
+                    {{ CHARACTERS[character]["name"] }}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="sixteen wide column">
+            <h5>Goed:</h5>
+            {% for character in CHARACTERS %}
+                {% if CHARACTERS[character]["alliance"] == "GOOD" %}
+                    {{ CHARACTERS[character]["name"] }}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="sixteen wide column">
+            <h5>Neutraal:</h5>
+            {% for character in CHARACTERS %}
+                {% if CHARACTERS[character]["alliance"] == "NEUTRAL" %}
+                    {{ CHARACTERS[character]["name"] }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

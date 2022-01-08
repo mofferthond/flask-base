@@ -1,5 +1,5 @@
 from app import db
-from app.wakkerdam.models import Dead
+from app.wakkerdam.models.Actor import Dead
 
 class Player(db.Model):
     __tablename__ = "players"
@@ -8,16 +8,14 @@ class Player(db.Model):
     _userId = db.Column("userId", db.Integer, db.ForeignKey('users.id'))
     _game = db.relationship("Game")
     _gameId = db.Column("gameId", db.Integer, db.ForeignKey("games.id"))
-    _character = db.relationship("Character")
-    _characterId = db.Column("characterId", db.Integer, db.ForeignKey("characters.id"))
 
     # referenced
     _chatters = db.relationship("Chatter")
+    _actors = db.relationship("Actor")
 
-    def __init__(self, user, game, character):
+    def __init__(self, user, game):
         self.setUser(user)
         self.setGame(game)
-        self.setCharacter(character)
     
     def getId(self):
         return self._id
@@ -33,15 +31,22 @@ class Player(db.Model):
 
     def setGame(self, game):
         self._game = game
-    
-    def getCharacter(self):
-        return self._character
-    
-    def setCharacter(self, character):
-        self._character = character
 
     def getChatters(self):
         return self._chatters
+    
+    def getActors(self):
+        return self._actors
+
+    def getActiveActors(self):
+        result = []
+        for actor in self.getActors():
+            if actor.isActive():
+                result.append(actor)
+        return result
 
     def isDead(self):
-        return isinstance(self.getCharacter(), Dead)
+        for actor in self.getActiveActors():
+            if isinstance(actor, Dead):
+                return True
+        return False

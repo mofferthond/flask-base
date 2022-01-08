@@ -19,7 +19,7 @@ def register_template_utils(app):
     app.add_template_global(index_for_role)
 
 def locale(tag):
-        from app.wakkerdam.models.Localization import Localization
+        from app.wakkerdam.models.constants.Localization import Localization
         from flask_login import current_user
 
         # @returns text for tag with CU's language, else English

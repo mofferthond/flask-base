@@ -26,12 +26,21 @@
             <div class="metadata">
                 <span class="date">{{ message.getTimestamp() }}</span>
               </div>
-              <div class="text">
-                {{ message.getText() }}
-              </div>
+                    {% if not message.isDeleted() %}
+                    <div class="text">
+                        {{ message.getText() }}
+                    </div>
+                    {% else %}
+                    <div class="text" style="font-style: italic;">
+                        [deleted]
+                    </div>
+                    {% endif %}
               {% if layer < 5 and chat.isOpen() %}
               <div class="actions">
                 <a class="reply" onclick="reply_to({{ message.getId() }})">Reageer</a>
+                {% if message.getChatter().getPlayer().getUser() == current_user and not message.isDeleted() %}
+                    <a class="reply" href="{{ url_for('wakkerdam.delete_message', messageId=message.getId()) }}">Verwijder</a>
+                {% endif %}
               </div>
               {% endif %}
                 {{ get_replies(message, layer+1) }}

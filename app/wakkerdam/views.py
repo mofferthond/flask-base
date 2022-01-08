@@ -376,8 +376,28 @@ def chat(chatId):
     db.session.commit()
     # render chat.html
     # @require form, chat{>chatters, >getOnlineAmount(), >getMessages()}
-    return render_template("wakkerdam/chat.html", form=form, chat=chat, display_navigation=False)
+    return render_template("wakkerdam/chat.html", form=form, chat=chat, current_user=current_user, display_navigation=False)
 
+@wakkerdam.route('/delete-message/<messageId>')
+def delete_message(messageId):
+    # Select message by id
+    message = Message.query.filter_by(_id=messageId).first()
+
+    # @aborts
+    #   - message does not exist(hidden)
+    #   - message is not made by CU
+    # @events
+    #   - set message to deleted
+    #   - redirect to chat
+    if message == None:
+        flash("Je zit niet in dit spel", "error")
+        return redirect('wakkerdam.games')
+    if message.getChatter().getPlayer().getUser() != current_user:
+        flash("Je kan niet berichten verwijderen die niet door jou zijn geschreven", "error")
+        return redirect(url_for('wakkerdam.chat', chatId=message.getChat().getId()))
+
+    message.delete()
+    return redirect(url_for('wakkerdam.chat', chatId=message.getChatter().getChat().getId()))
 
 @wakkerdam.route('/karakters')
 def characters():

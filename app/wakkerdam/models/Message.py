@@ -10,6 +10,7 @@ class Message(db.Model):
     _timestamp = db.Column("timestamp", db.Integer)
     _replyToId = db.Column("replyToId", db.Integer, db.ForeignKey("messages.id"))
     _replyTo = db.relationship("Message", remote_side=[_id])
+    _deleted = db.Column("deleted", db.Boolean)
 
     # referenced
     _replies = db.relationship("Message", remote_side=[_replyToId])
@@ -20,6 +21,7 @@ class Message(db.Model):
         self.setTimestamp(timestamp)
         if replyTo != None:
             self.setReplyTo(replyTo)
+        self.undelete()
 
 
     def getId(self):
@@ -42,6 +44,15 @@ class Message(db.Model):
 
     def setTimestamp(self, timestamp):
         self._timestamp = timestamp
+
+    def isDeleted(self):
+        return self._deleted
+
+    def delete(self):
+        self._deleted = True
+    
+    def undelete(self):
+        self._deleted = False
 
     def getReplyTo(self):
         return self._replyTo

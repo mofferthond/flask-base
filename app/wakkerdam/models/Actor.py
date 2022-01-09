@@ -90,6 +90,9 @@ class Actor(db.Model):
         return False
 
 class Dead(Actor):
+    _wasActor = db.relationship("Actor")
+    _wasActorId = db.Column(db.Integer, db.ForeignKey("actors.id"))
+
     def __init__(self, player):
         Actor.__init__(self, Character.query.filter_by(_tag="dead").first(), player)
 

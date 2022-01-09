@@ -12,6 +12,7 @@ class Character(db.Model):
 
 
     # referenced
+    _actionTypes = db.relationship("ActionType")
     _actors = db.relationship("Actor")
 
     def getId(self):

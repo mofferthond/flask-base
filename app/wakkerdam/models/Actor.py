@@ -55,7 +55,7 @@ class Actor(db.Model):
     _timeCreated = db.Column("timeCreated", db.Integer)
     _timeDeactivated = db.Column("timeDeactivated", db.Integer)
 
-    def __init__(self, character, player, timeCreated=datetime.now().strftime("%U")):
+    def __init__(self, character, player, timeCreated=int(round(datetime.now().timestamp()))):
         self.setCharacter(character)
         self.setPlayer(player)
         self.setTimeCreated(timeCreated)

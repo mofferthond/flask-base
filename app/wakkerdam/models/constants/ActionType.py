@@ -5,8 +5,7 @@ class ActionType(db.Model):
     __bind_key__ = "constants"
     _id = db.Column("id", db.Integer, primary_key=True)
     _name = db.Column("name", db.String(100))
-    _character = db.relationship("Character")
-    _characterId = db.Column("characterId", db.Integer, db.ForeignKey('characters.id'))
+    _characters = db.relationship("ActionAssociation")
     _opens = db.Column("opens", db.String(4))
     _closes = db.Column("closes", db.String(4))
 

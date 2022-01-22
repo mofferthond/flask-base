@@ -13,3 +13,4 @@ from app.wakkerdam.models.constants.Localization import Localization
 from app.wakkerdam.models.constants.Character import Character
 from app.wakkerdam.models.constants.ChatType import ChatType
 from app.wakkerdam.models.constants.ActionType import ActionType
+from app.wakkerdam.models.constants.ActionAssociation import ActionAssociation

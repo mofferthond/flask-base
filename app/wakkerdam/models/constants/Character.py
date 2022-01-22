@@ -12,7 +12,7 @@ class Character(db.Model):
 
 
     # referenced
-    _actionTypes = db.relationship("ActionType")
+    _actionTypeAssociations = db.relationship("ActionAssociation")
     _actors = db.relationship("Actor")
 
     def getId(self):
@@ -47,3 +47,9 @@ class Character(db.Model):
 
     def setAlliance(self, alliance):
         self._alliance = alliance
+
+    def getActionTypes(self):
+        result = []
+        for actionTypeAssociation in self._actionTypeAssociations:
+            result.append(actionTypeAssociation.getActionType())
+        return result

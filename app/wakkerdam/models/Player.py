@@ -54,3 +54,10 @@ class Player(db.Model):
             if isinstance(actor, Dead):
                 return True
         return False
+
+    def getAvailableActions(self):
+        result = []
+        for actor in self.getActiveActors():
+            if actor.isActive:
+                result.extend(actor.getActions())
+        return result

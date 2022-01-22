@@ -55,6 +55,9 @@ class Actor(db.Model):
     _timeCreated = db.Column("timeCreated", db.Integer)
     _timeDeactivated = db.Column("timeDeactivated", db.Integer)
 
+    # referenced
+    _actions = db.relationship("Action")
+
     def __init__(self, character, player, timeCreated=int(round(datetime.now().timestamp()))):
         self.setCharacter(character)
         self.setPlayer(player)
@@ -88,6 +91,9 @@ class Actor(db.Model):
         if self._timeDeactivated == None:
             return True
         return False
+
+    def getActions(self):
+        return self._actions
 
 class Dead(Actor):
     _wasActor = db.relationship("Actor")

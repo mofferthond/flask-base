@@ -176,16 +176,25 @@
     <div class="ui segment">
         <h4>Beschikbare acties:</h4>
         <div class="ui grid">
+            {% set count = namespace(value=0) %}
+            {% for action in current_user.getPlayer(game).getAvailableActions() %}
             <div class='column'>
                 <a class="ui segment grid center button left aligned" href="">
                   <div class='seven wide column'>
-                    <h2>Stemmen</h2>
+                    <h2>{{ action.getActionType().getName() }}</h2>
                   </div>
                   <div class='three wide column'>
                     
                   </div>
                 </a>
-              </div>
+            </div>
+            {% set count.value = count.value + 1 %}
+            {% endfor %}
+            {% if count.value == 0 %}
+            <div class="sixteen wide column">
+            <p>Je hebt (nog) geen acties die je kunt uitvoeren.</p>
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="ui segment">

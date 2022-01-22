@@ -99,3 +99,9 @@ class Game(db.Model):
             if not player.isDead():
                 count += 1
         return count
+
+    def createActions(self):
+        for player in self.getPlayers():
+            for actor in player.getActiveActors():
+                for actionType in actor.getCharacter().getActionTypes():
+                    actionType.createEmptyAction(actor)

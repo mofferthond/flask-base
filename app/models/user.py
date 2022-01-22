@@ -151,6 +151,13 @@ class User(UserMixin, db.Model):
     def getPlayers(self):
         return self._players
 
+    def getPlayer(self, game):
+        allPlayers = [player for player in self.getPlayers()]
+        for player in allPlayers:
+            if player.getGame() == game:
+                return player
+        return None
+
     def getInvites(self):
         return self._invites
     

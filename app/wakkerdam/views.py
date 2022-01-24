@@ -13,7 +13,7 @@ from flask_login import (
     logout_user
 )
 from sqlalchemy import select
-from app import db
+from app import db, scheduler
 from app.decorators import admin_required
 from app.models import EditableHTML
 from app.models.user import User, Role
@@ -411,3 +411,10 @@ def characters():
 @admin_required
 def admin_games():
     return "admin all games"
+
+
+
+
+@scheduler.task('cron', id='eleven', day='*', hour=21, minute=00)
+def doEvents(hour=11):
+    pass

@@ -9,12 +9,14 @@ from flask_rq import RQ
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 from flask_socketio import SocketIO
+from flask_apscheduler import APScheduler
 
 from app.assets import app_css, app_js, vendor_css, vendor_js
 from config import config as Config
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+scheduler = APScheduler()
 mail = Mail()
 db = SQLAlchemy()
 csrf = CSRFProtect()
@@ -48,6 +50,11 @@ def create_app(config):
     compress.init_app(app)
     RQ(app)
     socket.init_app(app)
+    scheduler.init_app(app)
+
+
+    # start the scheduler
+    scheduler.start()
 
     # Register Jinja template functions
     from .utils import register_template_utils

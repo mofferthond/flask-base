@@ -210,10 +210,10 @@
                     
                   </div>
                   <div class='three wide column'>
-                    <p>Opent: {{ chat.getChatType().getOpens() }}</p>
-                    <p>Sluit: {{ chat.getChatType().getCloses() }}</p>
+                    <p>Opent: {{ chat.getChatType().getDeadline().getOpensString() }}</p>
+                    <p>Sluit: {{ chat.getChatType().getDeadline().getClosesString() }}</p>
                   </div>
-                  {% if chat.getChatType().isOpen() %}
+                  {% if chat.getChatType().getDeadline().isOpen() %}
                     <div class='three wide green column'>
                         <h3 class="green">Nu open</h5>
                     </div>

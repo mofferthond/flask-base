@@ -148,8 +148,8 @@ def add_standard():
     admin = User.query.filter_by(id=1).first()
     user = User(confirmed=1, first_name='Daniël', last_name='Kuiper', email='mofferthond@gmail.com', password=Config.ADMIN_PASSWORD, role_id=1, avatar='steve', language="nl_NL")
     db.session.add(user)
-    village_chat = ChatType(name='Dorpchat', opens='1100', closes='1900')
-    db.session.add(village_chat)
+    deadline = Deadline.query.filter_by(_id=1).first()
+    village_chat = ChatType.query.filter_by(_id=1).first()
 
     first_game = Game(name='Eerste spel', ongoing=1, startDate='2030-12-12', hostingUser=user, playerAmount=10)
     db.session.add(first_game)

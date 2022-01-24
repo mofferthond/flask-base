@@ -8,8 +8,8 @@ class ActionType(db.Model):
     _tag = db.Column("tag", db.String(50))
     _name = db.Column("name", db.String(100))
     _characters = db.relationship("ActionAssociation")
-    _opens = db.Column("opens", db.String(4))
-    _closes = db.Column("closes", db.String(4))
+    _deadline = db.relationship("Deadline")
+    _deadlineId = db.Column("deadlineId", db.ForeignKey("deadlines.id"))
 
     def getId(self):
         return self._id
@@ -20,11 +20,8 @@ class ActionType(db.Model):
     def getCharacter(self):
         return self._character
 
-    def getOpens(self):
-        return self._opens
-
-    def getCloses(self):
-        return self._closes
+    def getDeadline(self):
+        return self._deadline
 
     def createEmptyAction(self, actor):
         tag = self._tag

@@ -38,7 +38,7 @@ class Chat(db.Model):
         return chatters
     
     def isOpen(self):
-        return self.getChatType().isOpen()
+        return self.getChatType().getDeadline().isOpen()
 
     def getMessages(self, orderBy="timestamp"):
         messages = []

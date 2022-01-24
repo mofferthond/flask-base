@@ -106,6 +106,14 @@ class Game(db.Model):
                 for actionType in actor.getCharacter().getActionTypes():
                     actionType.createEmptyAction(actor)
 
+    def collectDeadlines(self, time : int):
+        from app.wakkerdam.models.constants.Deadline import Deadline
+        opens = Deadline.query.filter_by(_opens=time)
+        closes = Deadline.query.filter_by(_closes=time)
+        result = []
+        result.extend(opens)
+        result.extend(closes)
+        return result
 
 
 #   Gameplay methods
@@ -119,3 +127,5 @@ class Game(db.Model):
             actor.declareDead(deadActor)
         db.session.add(deadActor)
         db.session.commit()
+
+

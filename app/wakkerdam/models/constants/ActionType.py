@@ -14,6 +14,9 @@ class ActionType(db.Model):
     def getId(self):
         return self._id
 
+    def getTag(self):
+        return self._tag
+
     def getName(self):
         return self._name
 

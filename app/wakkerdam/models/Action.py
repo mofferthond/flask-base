@@ -11,14 +11,14 @@ class Action(db.Model):
     _actionType = db.relationship("ActionType")
     _actionTypeId = db.Column("actionTypeId", db.Integer, db.ForeignKey("actionTypes.id"))
     _isPlayed = db.Column("isPlayed", db.Boolean)
-    _timeCreated = db.Column("timeCreated", db.Integer)
+    _timePlayer = db.Column("timePlayer", db.Integer)
 
     def __init__(self, actor):
         self.setActor(actor)
         self._isPlayed = False
 
-    def create(self, timeCreated=int(round(datetime.now().timestamp()))):
-        self._timeCreated = timeCreated
+    def create(self, timePlayer=int(round(datetime.now().timestamp()))):
+        self._timePlayer = timePlayer
 
     def getId(self):
         return self._id
@@ -35,11 +35,11 @@ class Action(db.Model):
     def setActionType(self, actionType):
         self._actionType = actionType
 
-    def getTimeCreated(self):
-        return self._timeCreated
+    def getTimePlayer(self):
+        return self._timePlayer
 
-    def setTimeCreated(self, timeCreated):
-        self._timeCreated = timeCreated
+    def setTimePlayer(self, timePlayer):
+        self._timePlayer = timePlayer
 
 class NewspaperArticleAction(Action):
     _article = db.relationship("Article")
@@ -74,7 +74,7 @@ class KillAction(TargetAction):
 
     def __init__(self, actor, target):
         TargetAction.__init__(self, actor, target)
-        self._actionType = ActionType.query.filter_by(_tag="KILL").first()
+        self._actionType = ActionType.query.filter_by(_tag="WOLF_KILL").first()
 
 class SafeAction(TargetAction):
 

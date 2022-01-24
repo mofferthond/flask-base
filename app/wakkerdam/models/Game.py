@@ -105,3 +105,17 @@ class Game(db.Model):
             for actor in player.getActiveActors():
                 for actionType in actor.getCharacter().getActionTypes():
                     actionType.createEmptyAction(actor)
+
+
+
+#   Gameplay methods
+
+    def killPlayer(self, player):
+        from app.wakkerdam.models.Actor import Dead
+        deadActor = Dead(player)
+        for actor in player.getActiveActors():
+            # if isinstance(actor, Dead):
+            #     continue
+            actor.declareDead(deadActor)
+        db.session.add(deadActor)
+        db.session.commit()

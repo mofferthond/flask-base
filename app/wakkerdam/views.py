@@ -40,7 +40,6 @@ def games():
 def game(gameId):
     # Select game with id gameId
     game = Game.query.filter_by(_id=gameId).first()
-    print(current_user.getPlayer(game).getAvailableActions())
     
     # @aborts
     #   - game does not exist

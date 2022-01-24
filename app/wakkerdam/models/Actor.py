@@ -54,9 +54,12 @@ class Actor(db.Model):
     _playerId = db.Column("playerId", db.Integer, db.ForeignKey("players.id"))
     _timeCreated = db.Column("timeCreated", db.Integer)
     _timeDeactivated = db.Column("timeDeactivated", db.Integer)
+    _becameActor = db.relationship("Actor", remote_side=[_id], enable_typechecks=False)
+    _becameActorId = db.Column("becameActorId", db.Integer, db.ForeignKey("actors.id"))
 
     # referenced
     _actions = db.relationship("Action")
+    _wasActors = db.relationship("Actor", remote_side=[_becameActorId])
 
     def __init__(self, character, player, timeCreated=int(round(datetime.now().timestamp()))):
         self.setCharacter(character)
@@ -87,6 +90,10 @@ class Actor(db.Model):
     def setTimeDeactivated(self, timeDeactivated):
         self._timeDeactivated = timeDeactivated
 
+    def deactivate(self):
+        if self.isActive():
+            self.setTimeDeactivated(int(round(datetime.now().timestamp())))
+
     def isActive(self):
         if self._timeDeactivated == None:
             return True
@@ -95,10 +102,11 @@ class Actor(db.Model):
     def getActions(self):
         return self._actions
 
-class Dead(Actor):
-    _wasActor = db.relationship("Actor")
-    _wasActorId = db.Column(db.Integer, db.ForeignKey("actors.id"))
+    def declareDead(self, deadActor):
+        self.deactivate()
+        self._becameActor = deadActor
 
+class Dead(Actor):
     def __init__(self, player):
         Actor.__init__(self, Character.query.filter_by(_tag="dead").first(), player)
 

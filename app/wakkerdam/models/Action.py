@@ -65,6 +65,9 @@ class TargetAction(Action):
     def __init__(self, actor, target):
         Action.__init__(self, actor)
         self._target = target
+    
+    def getTarget(self):
+        return self._target
 
 class KillAction(TargetAction):
     

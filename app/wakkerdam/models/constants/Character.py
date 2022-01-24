@@ -8,7 +8,7 @@ class Character(db.Model):
     _description = db.Column("description", db.String(2000))
     _shortDescription = db.Column("shortDescription", db.String(500))
     _tag = db.Column("tag", db.String(50))
-    _alliance = db.Column("alliance", db.Enum("GOOD", "BAD", "NEUTRAL"))
+    _alliance = db.Column("alliance", db.Enum("GOOD", "BAD", "NEUTRAL", "NONE"))
 
 
     # referenced
